@@ -1,33 +1,39 @@
-todo_list = []
+import sys
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLineEdit, QPushButton, QListWidget
 
-while True:
-    print("\n1. Add Task")
-    print("2. Remove Task")
-    print("3. Display Tasks")
-    print("4. Exit")
+class ToDoApp(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("To-Do List App")
+        self.setGeometry(100, 100, 400, 300)
+        self.tasks = []
 
-    choice = input("Enter your choice: ")
+        # Create widgets
+        self.layout = QVBoxLayout()
+        self.input_field = QLineEdit()
+        self.add_button = QPushButton("Add Task")
+        self.task_list = QListWidget()
 
-    if choice == '1':
-        task = input("Enter the task: ")
-        todo_list.append(task)
-        print("Task added successfully!")
-    elif choice == '2':
-        task = input("Enter the task to remove: ")
-        if task in todo_list:
-            todo_list.remove(task)
-            print("Task removed successfully!")
-        else:
-            print("Task not found!")
-    elif choice == '3':
-        if todo_list:
-            print("Your To-Do List:")
-            for i, task in enumerate(todo_list, 1):
-                print(f"{i}. {task}")
-        else:
-            print("Your To-Do List is empty!")
-    elif choice == '4':
-        print("Exiting...")
-        break
-    else:
-        print("Invalid choice! Please enter a number between 1 and 4.")
+        # Add widgets to layout
+        self.layout.addWidget(self.input_field)
+        self.layout.addWidget(self.add_button)
+        self.layout.addWidget(self.task_list)
+
+        # Connect button click to add_task method
+        self.add_button.clicked.connect(self.add_task)
+
+        # Set layout for the main window
+        self.setLayout(self.layout)
+
+    def add_task(self):
+        task = self.input_field.text()
+        if task:
+            self.tasks.append(task)
+            self.task_list.addItem(task)
+            self.input_field.clear()
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    window = ToDoApp()
+    window.show()
+    sys.exit(app.exec_())
